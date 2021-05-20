@@ -8,7 +8,7 @@ const checkLimit = (_req:Request, res:Response, next: NextFunction):any => {
         userName = res.locals.userName;
         userRole = userName.role;
     } catch (error) {
-        return res.status(500).json({ error: "Check Limit: error while creating movie. UserName object missing: " + error.message});
+        return res.status(400).json({ error: "Check Limit: error while creating movie. UserName object missing: " + error.message});
     }
 
     const searchObj = {
@@ -21,7 +21,7 @@ const checkLimit = (_req:Request, res:Response, next: NextFunction):any => {
         Movie.find(searchObj, (err, data) => {
 
             if (err) {
-                return res.status(500).json({ error: "Check Limit: error while checking DB limits: " + err.message });
+                return res.status(400).json({ error: "Check Limit: error while checking DB limits: " + err.message });
             }
 
             const month = new Date().getMonth();
@@ -31,7 +31,7 @@ const checkLimit = (_req:Request, res:Response, next: NextFunction):any => {
             })
 
             if (dataLength.length >= 5) {
-                return res.status(500).json({ error: "Check Limit: user reached monthly limit of requests." })
+                return res.status(400).json({ error: "Check Limit: user reached monthly limit of requests." })
             } else {
                 next();
             }
