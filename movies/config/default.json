@@ -1,0 +1,6 @@
+{
+    "port": 4000,
+    "dbURI": "mongodb://mongo:27017/movies",
+    "omdbURI": "http://www.omdbapi.com/?i=tt3896198&",
+    "omdbKey": "48caed9c&t"
+}
