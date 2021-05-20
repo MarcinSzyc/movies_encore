@@ -1,8 +1,9 @@
 import {Request, Response, NextFunction} from "express";
 import Movie from "../models/movies.model";
 
-const checkLimit = (req:Request, res:Response, next: NextFunction) => {
-    var userName, userRole;
+const checkLimit = (_req:Request, res:Response, next: NextFunction):any => {
+    let userName, userRole;
+
     try {
         userName = res.locals.userName;
         userRole = userName.role;

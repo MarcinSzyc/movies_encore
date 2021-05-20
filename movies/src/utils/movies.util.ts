@@ -2,7 +2,7 @@ import Movie from "../models/movies.model";
 import config from "config";
 import axios from "axios";
 
-export async function returnAllMovies() {
+export async function returnAllMovies():Promise<any> {
     try {
         return await Movie.find();
     } catch (error) {
@@ -10,13 +10,10 @@ export async function returnAllMovies() {
     }
 }
 
-export async function createNewMovie (movieTitle: string, username: string) {
-    var movieDetails;
-
+export async function createNewMovie (movieTitle: string, username: string):Promise<any> {
     if (!movieTitle || !username) {
         throw new Error("Create Movie: missing input parameters to create new movie.");
     }
-
 
     const movies:any = await findMovie(movieTitle);
     const isMovieAlreadyInDB = movies.length > 0;
@@ -25,7 +22,7 @@ export async function createNewMovie (movieTitle: string, username: string) {
     }
 
     try {
-        movieDetails = await fetchMovieDetails(movieTitle);
+        const movieDetails = await fetchMovieDetails(movieTitle);
         const newMovie = new Movie({
             title: movieDetails.data.Title,
             released: movieDetails.data.Released,
@@ -63,15 +60,12 @@ const findMovie = async (movieTitle:string) => {
         throw new Error("Movie Find: no movie title provided");
     }
 
-    var data;
-
     try {
-        let querryObj = { 
+        const querryObj = { 
             title : movieTitle
         }
-        data = await Movie.find(querryObj);
+        return await Movie.find(querryObj);
     } catch (error) {
         throw new Error("Movie Find: error while searching for movie in database: " + error.message);
     }
-    return data;
 }
