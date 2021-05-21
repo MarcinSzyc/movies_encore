@@ -1,5 +1,15 @@
 version: "3.2"
 services:
+  auth:
+    container_name: authorization
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+    ports:
+      - published: ${APP_PORT:-3000}
+        target: 3000
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
   movies:
     container_name: movies
     build:
@@ -17,13 +27,3 @@ services:
     image: mongo
     ports: 
       - '27017:27017'
-  auth:
-    container_name: authorization
-    build:
-      context: .
-      dockerfile: ./auth/Dockerfile
-    ports:
-      - published: ${APP_PORT:-3000}
-        target: 3000
-    environment:
-      JWT_SECRET: ${JWT_SECRET}

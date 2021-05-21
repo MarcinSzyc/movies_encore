@@ -14,3 +14,5 @@ app.listen(port, () => {
     connect();
     routes(app);
 });
+
+export default app;

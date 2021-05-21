@@ -23,6 +23,12 @@ export async function createNewMovie (movieTitle: string, username: string):Prom
 
     try {
         const movieDetails = await fetchMovieDetails(movieTitle);
+        const isMoviePresentInDB = movieDetails.data.Response === 'True';
+
+        if (!isMoviePresentInDB) {
+            throw new Error("Create Movie: movie not found in OMDB: " + movieDetails.data.Error);
+        }
+
         const newMovie = new Movie({
             title: movieDetails.data.Title,
             released: movieDetails.data.Released,
