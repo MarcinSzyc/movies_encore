@@ -26,7 +26,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is testbed for RESTfull Movies application. It use 3 endpoints and 2 services collated together in one dockey-compose file.
+This is testbed for RESTfull Movies application. It use 2 endpoints and 2 services collated together in one dockey-compose file.
 After authentication user has an option to create a Movie entry in DataBase. Once filled user can fetch all available data.
 
 ## Built With
@@ -46,7 +46,7 @@ This section should list any major frameworks that you built your project using.
 ## Getting Started
 
 1. Clone repository.
-2. Run from root dir. Please not that MONGODB password and OMDB_KEY is to be provided privately. Both services/applications use
+2. Run from root dir. Both services/applications use
 the same secret value.
 
 ```
@@ -78,8 +78,8 @@ Example request should always consist of Authorization header.
 Authorization: Bearer <token>
 ```
 
-1. Fetch token first with GET /Movies endpoint.
-2. Use the token to make POST /Movies request. POST request need to have movieName in the body eg.
+1. Fetch token first with GET /auth endpoint.
+2. Use the token to make GET /Movies and POST /Movies request. POST request need to have movieName in the body eg.
 
 ```
 {
