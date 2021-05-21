@@ -87,6 +87,13 @@ Authorization: Bearer <token>
 }
 
 ```
+## Tests
+
+Make sure to run authorization app and run command: 
+
+```
+npm run test
+```
 
 <!-- LICENSE -->
 ## License
