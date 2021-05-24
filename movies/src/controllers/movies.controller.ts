@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {returnAllMovies, createNewMovie} from "../utils/movies.util";
+import axios from "axios";
 
 export async function getAllMovies (_req: Request, res: Response):Promise<any> {
     try {
@@ -19,4 +20,18 @@ export async function createMovie (req: Request, res: Response):Promise<any> {
     } catch (error) {
         return res.status(400).json({error: error.message});
     }
+}
+
+export async function showLoginView(req: Request, res: Response):Promise<any> {
+    res.render('/login.ejs');
+}
+
+export async function showMoviesView(req: Request, res: Response):Promise<any> {
+    try {
+        
+    } catch (error) {
+        
+    }
+    const allMoviesList = getAllMovies();
+    res.render('/movies.ejs', {allMovies: allMoviesList});
 }

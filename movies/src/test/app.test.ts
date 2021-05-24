@@ -1,30 +1,33 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import app from "../app";
-import axios from "axios";
 import Movie from "../models/movies.model"
+import config from "config";
+import sinon from "sinon";
+import jwt from "jsonwebtoken";
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('endpoint tests', function () {
-    let token:any;
+    let jwtVerify:any;
+    const user:any = config.get('users');
+    beforeEach(async function () {
+        jwtVerify = sinon.stub(jwt, 'verify').callsFake(function () {
+            return user.basic;
+        });
+    });
     
-    before(async function () {
-        try {
-            const response = await axios({
-                method: 'post',
-                url: 'http://localhost:3000/auth',
-                data: {
-                    username: 'basic-thomas',
-                    password: 'sR-_pcoow-27-6PAwCD8'
-                }
-            })
-            token = response.data.token;
-        } catch (err) {
-            console.error('Error while connecting to auth server:' + err);
-        }
-    }) 
+    afterEach(async function () {
+        // try {
+        //     await Movie.deleteMany({title: "Test" });
+        //     console.log('test data successfully removed');
+        // } catch (error) {
+        //     console.log('App Tests: error while cleaning db' + error);
+        // } finally {
+        jwtVerify.restore();
+        // }
+    })
 
     // GET Movies
     describe('GET Movies', function () {
@@ -44,7 +47,7 @@ describe('endpoint tests', function () {
         it('It should return error due to invalid token', function (done) {
             chai.request(app)
                 .get('/movies')
-                .set({ Authorization: `Bearer ${token.slice(0,-1) + 'b'}` })
+                .set({ Authorization: 'Stubbed Token' })
                 .then(function (res) {
                     res.should.have.status(403);
                     done()
@@ -58,7 +61,7 @@ describe('endpoint tests', function () {
         it('It should get all movies from database', function (done) {
             chai.request(app)
                 .get('/movies')
-                .set({ Authorization: `Bearer ${token}` })
+                .set({ Authorization: 'Stubbed Token' })
                 .then(function (res) {
                     res.should.have.status(200);
                     done()
@@ -72,7 +75,7 @@ describe('endpoint tests', function () {
 
     // POST Movies
     describe('POST Movies', () => {
-        before(function () {
+        beforeEach(function () {
             Movie.deleteMany({}, () => {
                 console.log('db clean');
             })
@@ -81,7 +84,7 @@ describe('endpoint tests', function () {
         it('It should create new movie and save it to database', function (done) {
             chai.request(app)
                 .post('/movies')
-                .set({Authorization: `Bearer ${token}` })
+                .set({Authorization: 'Stubbed Token' })
                 .send({movieName: 'test'})
                 .then(function (res) {
                     res.should.have.status(200);
@@ -97,7 +100,7 @@ describe('endpoint tests', function () {
         it('It should return error due to invalid token', function (done) {
             chai.request(app)
                 .post('/movies')
-                .set({Authorization: `Bearer ${token.slice(0,-1) + 'b'}`})
+                .set({Authorization: 'Stubbed Token'})
                 .send({movieName: 'test'})
                 .then(function (res) {
                     res.should.have.status(403);
@@ -126,7 +129,7 @@ describe('endpoint tests', function () {
         it('It should return error due to no movie found', function (done) {
             chai.request(app)
                 .post('/movies')
-                .set({Authorization: `Bearer ${token}` })
+                .set({Authorization: 'Stubbed Token' })
                 .send({movieName: 'tttittaniiccc'})
                 .then(function (res) {
                     res.should.have.status(400);
@@ -140,10 +143,10 @@ describe('endpoint tests', function () {
 
         it('It should return error due to entry already found', async function (done) {
             const requester = chai.request(app).keepOpen();
-            await requester.post('/movies').set({Authorization: `Bearer ${token}` }).send({movieName: 'Test'})
+            await requester.post('/movies').set({Authorization: 'Stubbed Token' }).send({movieName: 'Test'})
 
             requester.post('/movies')
-                .set({Authorization: `Bearer ${token}` })
+                .set({Authorization: 'Stubbed Token' })
                 .send({movieName: 'Test'})
                 .then(function (res) {
                     res.should.have.status(400);
@@ -173,11 +176,11 @@ describe('endpoint tests', function () {
             ]
 
             for (const movie in movieList) {
-                await requester.post('/movies').set({Authorization: `Bearer ${token}` }).send(movie);
+                await requester.post('/movies').set({Authorization: 'Stubbed Token' }).send(movie);
             }
 
             requester.post('/movies')
-                .set({Authorization: `Bearer ${token}` })
+                .set({Authorization: 'Stubbed Token' })
                 .send({movieName: 'Interstellar', createdBy: 'testUser'})
                 .then(function (res) {
                     res.should.have.status(400);
@@ -190,14 +193,4 @@ describe('endpoint tests', function () {
         })
     })
 
-    after(async function () {
-        try {
-            await Movie.deleteMany({title: "Test" });
-            console.log('test data successfully removed');
-        } catch (error) {
-            console.log('App Tests: error while cleaning db' + error);
-        } finally {
-            process.exit();
-        }
-    })
 })

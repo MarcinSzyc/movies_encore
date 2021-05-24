@@ -9,6 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.set('views','./src/views');
 
 app.listen(port, () => {
     connect();
