@@ -26,12 +26,16 @@ export async function showLoginView(req: Request, res: Response):Promise<any> {
     res.render('/login.ejs');
 }
 
-export async function showMoviesView(req: Request, res: Response):Promise<any> {
-    try {
+
+// Not for review. Part of project extension - START
+// export async function showMoviesView(req: Request, res: Response):Promise<any> {
+//     try {
         
-    } catch (error) {
+//     } catch (error) {
         
-    }
-    const allMoviesList = getAllMovies();
-    res.render('/movies.ejs', {allMovies: allMoviesList});
-}
+//     }
+//     const allMoviesList = getAllMovies();
+//     res.render('/movies.ejs', {allMovies: allMoviesList});
+// }
+
+// Not for review. Part of project extension - END
